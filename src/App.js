@@ -1,25 +1,40 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const token = process.env.REACT_APP_TOKEN_ENV
+
+  localStorage.setItem("id_token", JSON.stringify(token))
+
+	function submitHandler(event) {
+		event.preventDefault();
+
+      let url = "localhost:3001"
+	let headerToken = JSON.parse(localStorage.getItem("id_token"));
+
+	console.log(headerToken)
+
+			axios
+				.get(url, {
+					header: {
+						Authorization: `Bearer ${headerToken}`
+					}
+				})
+				.then((res) => {
+					console.log(res.data);
+        })
+        .catch((error) => alert(error.message))
+
+	}
+
+	return (
+		<div className="App">
+			<div>Hi!!!!!</div>
+			<button onClick={submitHandler}>GET TOKEN</button>
+		</div>
+	);
 }
 
 export default App;
